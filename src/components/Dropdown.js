@@ -1,6 +1,7 @@
 import React from 'react'
 import '../style.css'
 
+// Creating of the arrow-down icon in the dropdown object.
 const Icon = () => {
     return (
         <svg height="20" width="20" viewBox="0 0 20 20">
@@ -9,11 +10,12 @@ const Icon = () => {
   )
 }
 
-
+// The dropdown object is taking three props; a placeholder, the options and a function. 
 export default function Dropdown({placeHolder, options, onChange}) {
     const [showMenu, setShowMenu] = React.useState(false)
     const [selectedValue, setSelectedValue] = React.useState(null)
 
+    // A useEffect-hook is used to create a eventlistener to the dropdown object.
     React.useEffect(() => {
         const handler = () => setShowMenu(false)
 
@@ -23,11 +25,13 @@ export default function Dropdown({placeHolder, options, onChange}) {
         }
     })
     
+    // Helper function that handles the click on the dropdown, and changes the state of 'showMenu'. 
     function handleInputClick(e) {
         e.stopPropagation()
         setShowMenu(!showMenu)
     }
 
+    // Helper function that changes the value that is displayed in the dropdown object if a value is chosen. 
     function getDisplay() {
         if (selectedValue){
             return selectedValue.label
@@ -35,19 +39,23 @@ export default function Dropdown({placeHolder, options, onChange}) {
         return placeHolder
     }
 
+    // A function that handles the clicking of elements in the dropdown menu. 
     function onItemClick(option) {
+        // Changes the value of the selectedValue state, 
         setSelectedValue(option)
+        // and call the onChange function from the App component, either the 'registerCategory' or the 'registerDifficulty' function. 
         onChange(option.value)
     }
 
+    // A function that changes the state of the selectedValue state.
     function isSelected(option) {
         if (!selectedValue) {
             return false
         }
-
         return selectedValue.value === option.value
     }
     
+    // Rendering of the dropdown object. 
     return (
         <div className='dropdown-container'>
             <div onClick={handleInputClick} className='dropdown-input'>

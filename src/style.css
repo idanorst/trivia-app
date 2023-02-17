@@ -70,6 +70,7 @@
 
 /* SETTINGS-PAGE */
 .settings-page {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -164,6 +165,7 @@
   opacity: 0.5;
 }
 
+/* Button-styles */
 .quiz-page--btn {
   width: 150px;
   height: 40px;
@@ -258,6 +260,7 @@
   color: #fff;
 }
 
+/* MEDIA QUERY TO ADJUST THE WIDTH WHEN SCREEN GET'S BIG */
 @media screen and (min-width: 750px) {
   .container {
     width: 80%;
