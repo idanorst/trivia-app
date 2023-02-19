@@ -3,7 +3,6 @@ import React from 'react'
 import Quiz from './components/Quiz'
 import Start from './components/Start'
 import UserInput from './components/UserInput'
-import Countdown from './components/Countdown'
 /* import {data} from './data.js' */
 
 export default function App() {

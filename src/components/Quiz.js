@@ -190,7 +190,7 @@ export default function Quiz(props) {
             {isCountdownVisible && 
             <div className='countdown-overlay'>
                 <div>
-                    <img src={loading}></img>
+                    <img src={loading} alt='loading icon'/>
                 </div>
             </div>}
             <div className='quiz-page--container'>
