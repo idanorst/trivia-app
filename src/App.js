@@ -3,6 +3,7 @@ import React from 'react'
 import Quiz from './components/Quiz'
 import Start from './components/Start'
 import UserInput from './components/UserInput'
+import Countdown from './components/Countdown'
 /* import {data} from './data.js' */
 
 export default function App() {
@@ -10,6 +11,7 @@ export default function App() {
   const [showSettings, setShowSettings] = React.useState(false)
   const [difficulty, setDifficulty] = React.useState()
   const [category, setCategory] = React.useState()
+  const [nrOfQuestions, setNrOfQuestions] = React.useState()
 
   // These choices are chosen from the choices on the Open Trivia API page.
   const categoryChoices = [
@@ -34,6 +36,13 @@ export default function App() {
     {value: "hard", label: "Hard"}
   ]
 
+  const nrOfQuestionsChoices = [
+    {value: "5", label: "5"},
+    {value: "10", label: "10"},
+    {value: "15", label: "15"},
+    {value: "20", label: "20"}
+  ]
+
   // Function that opens the quiz page by changing the state of 'showSettings' and 'start'
   function startQuiz() {
     setShowSettings(false)
@@ -50,13 +59,17 @@ export default function App() {
     setStart(false)
   }
 
-  // Two functions to save the category and the difficulty that the player chose in the settings. 
+  // Three functions to save the category, difficulty and number of questions that the player chose in the settings. 
   function registerCategory(value) {
     setCategory(value)
   }
 
   function registerDifficulty(value) {
     setDifficulty(value) 
+  }
+
+  function registerNumberOfQuestions(value){
+    setNrOfQuestions(value)
   }
 
   return (
@@ -68,15 +81,18 @@ export default function App() {
         <UserInput 
           handleClick={startQuiz}
           registerCategory={registerCategory}
-          registerDifficulty={registerDifficulty} 
+          registerDifficulty={registerDifficulty}
+          registerNumberOfQuestions={registerNumberOfQuestions} 
           categoryChoices={categoryChoices} 
           difficultyChoices={difficultyChoices}
+          nrOfQuestionsChoices={nrOfQuestionsChoices}
           />}
       {start && 
         <Quiz 
           handleClick={newGame}
           difficulty={difficulty}
-          category={category} 
+          category={category}
+          nrOfQuestions={nrOfQuestions} 
           />}
     </div>
     

@@ -1,7 +1,6 @@
 import '../style.css';
 import React from 'react'
-import BlobRight from '../images/blobs_small.png'
-import BlobLeft from '../images/blobs_small_2.png'
+import loading from '../images/loading.png'
 import {nanoid} from 'nanoid'
 
 export default function Quiz(props) {
@@ -10,20 +9,28 @@ export default function Quiz(props) {
     const [gameCompleted, setGameCompleted] = React.useState(false)
     const [questions, setQuestions] = React.useState([])
     const [countCorrect, setCountCorrect] = React.useState(0)
-
+    const [isCountdownVisible, setIsCountdownVisible] = React.useState(true)
+    
     // Using a useEffect-hook to make the API-call and set the quiz-data
     React.useEffect(() => {
+
         async function getQuizData() {
-            // The url to the open trivia API, where I already have chosen the type of encoding, the number of questions, and what type of questions to be chosen
-            var http = "https://opentdb.com/api.php?encode=base64&amount=5&type=multiple"
+            // The url to the open trivia API, where I already have chosen the type of encoding and what type of questions to be chosen
+            var http = "https://opentdb.com/api.php?encode=base64&type=multiple"
             // If the player chose a difficulty
-            if (props.difficulty !== ""){
+            if (typeof props.difficulty !== 'undefined'){
                 http += `&difficulty=${props.difficulty}`
             }
             // or a category
-            if (props.category !== ""){
+            if (typeof props.category !== 'undefined'){
                 // these are added to the url. 
                 http += `&category=${props.category}`
+            }
+            // Finally the number of questions, that the player wants, is added to the url.
+            if (typeof props.nrOfQuestions === 'undefined') {
+                http += `&amount=5`
+            } else {
+                http += `&amount=${props.nrOfQuestions}`
             }
             const res = await fetch(http)
             const data = await res.json()
@@ -43,7 +50,7 @@ export default function Quiz(props) {
 
             // Collecting the correct answers in a separate list.
             var correctAnswerList = []
-            for (let i = 0; i < 5; i++){
+            for (let i = 0; i < props.nrOfQuestions; i++){
                 var correct = atob(data.results[i].correct_answer)
                 correctAnswerList.push(correct)
                 
@@ -72,7 +79,12 @@ export default function Quiz(props) {
             return answerArray
         }        
         getQuizData()
-    }, [props.difficulty, props.category])
+    }, [props.difficulty, props.category, props.nrOfQuestions])
+
+    // Using setTimeout() to make the loading-overlay disappear after three seconds.
+    setTimeout(() => {
+        setIsCountdownVisible(false)
+    }, 3000)
 
     // The helper function to sort the answers list. 
     function func(a, b){
@@ -174,17 +186,22 @@ export default function Quiz(props) {
     
     return (
         <div className='quiz-page'>
-            <img className="blob-right" alt="yellow-figure" src={BlobRight}/>
+            {/* Using an overlay until the questions are loaded */}
+            {isCountdownVisible && 
+            <div className='countdown-overlay'>
+                <div>
+                    <img src={loading}></img>
+                </div>
+            </div>}
             <div className='quiz-page--container'>
                 {questionElements}
             </div>
-            {!gameCompleted && <button className='quiz-page--btn' onClick={checkResults}>Check answers</button>}
+            {!gameCompleted &&<button className='quiz-page--btn' onClick={checkResults}>Check answers</button>}
             {gameCompleted && 
             <div className='play-again--box'>
-                <p className='result-text'>You scored {countCorrect}/5 correct answers</p>
+                <p className='result-text'>You scored {countCorrect}/{typeof props.nrOfQuestions === 'undefined' ? '5' : props.nrOfQuestions} correct answers</p>
                 <button className="quiz-page--btn play-again-btn" onClick={props.handleClick}>Play again</button>
             </div>}
-            <img className="blob-left" alt="blue-figure" src={BlobLeft}/>
         </div>
     )
 } 
